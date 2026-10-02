@@ -1,0 +1,55 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: humansonly
+      POSTGRES_PASSWORD: humansonly_dev
+      POSTGRES_DB: humansonly
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U humansonly"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: on-failure
+
+  web:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ./app:/app
+      - node_modules:/app/node_modules
+      - next_cache:/app/.next
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://humansonly:humansonly_dev@db:5432/humansonly
+      - DIRECT_DATABASE_URL=postgres://humansonly:humansonly_dev@db:5432/humansonly
+      - NEXT_PUBLIC_HOST_URL=https://3000-${BASE44_PUBLIC_HOST_SUFFIX}
+      - BASE44_PUBLIC_HOST_SUFFIX=${BASE44_PUBLIC_HOST_SUFFIX}
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+    env_file:
+      - ./.env.base44-defaults
+      - /run/base44/app.env
+    depends_on:
+      db:
+        condition: service_healthy
+    command:
+      [
+        "sh", "-ec",
+        "npm install --no-audit --no-fund && cd src && npx prisma migrate deploy && cd /app && exec npm run dev"
+      ]
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 90s
+    restart: on-failure
+
+volumes:
+  pgdata:
+  node_modules:
+  next_cache:

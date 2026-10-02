@@ -1,0 +1,62 @@
+{
+  "previewPort": 3000,
+  "healthPath": "/api/health",
+  "startCommand": "docker compose -f docker-compose.base44.yml up -d",
+  "secrets": [
+    {
+      "name": "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
+      "description": "Clerk publishable key from your Clerk dashboard (https://dashboard.clerk.com). Required for authentication to work.",
+      "requiredAtBoot": true,
+      "generatedForDevelopment": true
+    },
+    {
+      "name": "CLERK_SECRET_KEY",
+      "description": "Clerk secret key from your Clerk dashboard (https://dashboard.clerk.com). Required for authentication to work.",
+      "requiredAtBoot": true,
+      "generatedForDevelopment": true
+    },
+    {
+      "name": "JWT_SECRET_KEY",
+      "description": "Secret used to sign/verify legacy JWT tokens. Any random string works for local dev.",
+      "requiredAtBoot": true,
+      "generatedForDevelopment": true
+    },
+    {
+      "name": "BLUE_SECRET_KEY",
+      "description": "App secret for the 'blue' verification check. Any random string works for local dev.",
+      "requiredAtBoot": true,
+      "generatedForDevelopment": true
+    },
+    {
+      "name": "CREATION_SECRET_KEY",
+      "description": "App secret for creation flow validation. Any random string works for local dev.",
+      "requiredAtBoot": true,
+      "generatedForDevelopment": true
+    },
+    {
+      "name": "TURNSTILE_SECRET_KEY",
+      "description": "Cloudflare Turnstile secret key from your Turnstile dashboard. Optional — human challenge runs in dry-run mode without it.",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "NEXT_PUBLIC_TURNSTILE_SITE_KEY",
+      "description": "Cloudflare Turnstile site key from your Turnstile dashboard. Optional — human challenge runs in dry-run mode without it.",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "NEXT_PUBLIC_SUPABASE_URL",
+      "description": "Supabase project URL. Optional — file storage defaults to local mode without it.",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "NEXT_PUBLIC_SUPABASE_KEY",
+      "description": "Supabase anon/public API key. Optional — file storage defaults to local mode without it.",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "SUPABASE_SERVICE_ROLE_KEY",
+      "description": "Supabase service role key for server-side storage uploads. Optional — file storage defaults to local mode without it.",
+      "requiredAtBoot": false
+    }
+  ]
+}

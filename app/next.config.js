@@ -13,7 +13,13 @@ if (allowedOriginHostname && !imageDomains.includes(allowedOriginHostname)) {
     imageDomains.push(allowedOriginHostname);
 }
 
+const devOrigins = [];
+if (process.env.BASE44_PUBLIC_HOST_SUFFIX) {
+    devOrigins.push('3000-' + process.env.BASE44_PUBLIC_HOST_SUFFIX);
+}
+
 const nextConfig = {
+    allowedDevOrigins: devOrigins.length ? devOrigins : undefined,
     experimental: {
         serverActions: {
             bodySizeLimit: '50mb',
